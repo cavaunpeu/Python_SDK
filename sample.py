@@ -13,10 +13,10 @@ query1 = client.query('orders',
                        'orders.created_date': '90 days'})
 
 # create another query object
-query2 = client.query('orders', 'thelook', 
+query2 = client.query('orders', 'thelook',
                       ['orders.count'],
                       {'users.created_date': '90 days'})
 query2.add_filters({'orders.created_date': '90 days'})
 
-print query1.run()
-print query2.run()
+print(query1.run())
+print(query2.run())

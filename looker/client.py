@@ -55,17 +55,17 @@ class Query(object):
     def __query_params(self):
         fields_string = ",".join(sorted([field.lower() for field in self.fields]))
         filters_list = []
-        for key, value in self.filters.iteritems():
-            filters_list.append("filters[%s]=%s" % (str(key).lower(), urllib.quote_plus(str(value))))
+        for key, value in iter(self.filters.items()):
+            filters_list.append("filters[%s]=%s" % (str(key).lower(), urllib.parse.quote_plus(str(value))))
         return "fields=%s&%s&limit=%i" % (fields_string, "&".join(sorted(filters_list)), self.limit)
 
     def __headers(self, uri):
-        today = email.Utils.formatdate(localtime=True)
+        today = email.utils.formatdate(localtime=True)
         nonce = hex(rnd.getrandbits(128))[2:-1]
         stringToSign = self.__generateStringToSign(uri, today, nonce)
-        hashed = hmac.new(self.credentials.secret, unicode(stringToSign, "utf-8"), sha1)
+        hashed = hmac.new(str.encode(self.credentials.secret, "utf-8"), str.encode(stringToSign, "utf-8"), sha1)
         signature = binascii.b2a_base64(hashed.digest())[:-1]
-        return {"Authorization": self.credentials.token + ':' + signature,
+        return {"Authorization": self.credentials.token + ':' + bytes.decode(signature, "utf-8"),
                 "Date": today,
                 "x-llooker-nonce": nonce,
                 "Accept": "application/json",
