@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='looker_sdk',
-      version='0.2',
+      version='0.1python3',
       description='Python SDK for pulling data from Looker',
       url='https://github.com/llooker/python_sdk',
       author='Scott Hoover',
